@@ -1,0 +1,138 @@
+name: Release & Changelog
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.1)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Get previous tag
+        PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+
+        if [ -z "$PREVIOUS_TAG" ]; then
+          echo "First release - generating full changelog"
+          CHANGELOG=$(git log --pretty=format:"- %s (%h)" --reverse)
+        else
+          echo "Generating changelog since $PREVIOUS_TAG"
+          CHANGELOG=$(git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s (%h)" --reverse)
+        fi
+
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Extract version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION="${GITHUB_REF#refs/tags/v}"
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.version.outputs.version }}
+        release_name: Dr. Nexus v${{ steps.version.outputs.version }}
+        body: |
+          ## 🎉 Dr. Nexus Medical Knowledge Base System
+
+          ### What's Changed
+          ${{ steps.changelog.outputs.changelog }}
+
+          ### 📦 Deployment
+          - **Production:** https://dr-nexus.vercel.app
+          - **Repository:** https://github.com/zach-wendland/dr-nexus
+
+          ### 🚀 Features
+          - FHIR R4 and HL7 C-CDA XML ingestion
+          - Interactive Next.js medical dashboard
+          - Comprehensive timeline visualization
+          - AI-powered analysis (Claude)
+
+          ### 📋 Installation
+          ```bash
+          pip install -r requirements.txt
+          npm install
+          npm run build
+          ```
+
+          **Full Changelog:** https://github.com/zach-wendland/dr-nexus/compare/v${{ steps.version.outputs.version }}
+        draft: false
+        prerelease: false
+
+  build-artifacts:
+    name: Build Release Artifacts
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Build Python package
+      run: |
+        pip install build
+        python -m build
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Build Next.js
+      run: |
+        npm ci
+        npm run build
+
+    - name: Create distribution archive
+      run: |
+        tar -czf dr-nexus-release.tar.gz \
+          dr_nexus/ \
+          app/ \
+          MedicalDashboard.tsx \
+          requirements.txt \
+          package.json \
+          README.md \
+          --exclude="__pycache__" \
+          --exclude="node_modules" \
+          --exclude=".git"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-artifacts
+        path: |
+          dr-nexus-release.tar.gz
+          dist/
+        retention-days: 30

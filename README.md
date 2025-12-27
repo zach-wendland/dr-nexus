@@ -1,6 +1,13 @@
 # Dr. Nexus - Medical Knowledge Base Builder
 
+[![Python Backend CI](https://github.com/zach-wendland/dr-nexus/actions/workflows/python-ci.yml/badge.svg)](https://github.com/zach-wendland/dr-nexus/actions/workflows/python-ci.yml)
+[![Next.js Frontend CI](https://github.com/zach-wendland/dr-nexus/actions/workflows/nextjs-ci.yml/badge.svg)](https://github.com/zach-wendland/dr-nexus/actions/workflows/nextjs-ci.yml)
+[![Deploy to Vercel](https://github.com/zach-wendland/dr-nexus/actions/workflows/deploy.yml/badge.svg)](https://github.com/zach-wendland/dr-nexus/actions/workflows/deploy.yml)
+[![CodeQL](https://github.com/zach-wendland/dr-nexus/actions/workflows/codeql.yml/badge.svg)](https://github.com/zach-wendland/dr-nexus/actions/workflows/codeql.yml)
+
 A comprehensive system for analyzing longitudinal patient medical records and building a structured medical knowledge base.
+
+**Live Demo:** [https://dr-nexus.vercel.app](https://dr-nexus.vercel.app)
 
 ## Overview
 
