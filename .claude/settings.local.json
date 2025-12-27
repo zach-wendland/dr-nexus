@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(du:*)",
+      "Bash(python scripts/initial_build.py:*)",
+      "Bash(python:*)",
+      "Bash(git init:*)",
+      "Bash(cat:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

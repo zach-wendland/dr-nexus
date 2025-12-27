@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dr-nexus.local/kb-schema.json",
+  "title": "Dr. Nexus Knowledge Base Schema",
+  "description": "Schema for Dr. Nexus medical knowledge base",
+  "type": "object",
+  "required": ["metadata", "patient_profile", "timeline", "symptom_registry", "action_items", "unresolved_questions"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["version", "generated_at", "source_files_count", "processing_duration_seconds"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_files_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "processing_duration_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "dr_nexus_version": {
+          "type": "string"
+        },
+        "previous_version": {
+          "type": ["string", "null"]
+        },
+        "changelog": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "patient_profile": {
+      "type": "object",
+      "required": ["demographics"],
+      "properties": {
+        "demographics": {
+          "type": "object",
+          "required": ["patient_id", "name", "date_of_birth", "gender"],
+          "properties": {
+            "patient_id": {"type": "string"},
+            "name": {"type": "string"},
+            "date_of_birth": {"type": "string", "format": "date"},
+            "age": {"type": ["integer", "null"]},
+            "gender": {
+              "type": "string",
+              "enum": ["male", "female", "other", "unknown"]
+            },
+            "mrn": {"type": ["string", "null"]}
+          }
+        },
+        "chronic_conditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": {"type": "string"},
+              "icd10_code": {"type": ["string", "null"]},
+              "snomed_code": {"type": ["string", "null"]},
+              "status": {
+                "type": "string",
+                "enum": ["active", "resolved", "in_remission", "recurrence"]
+              },
+              "onset_date": {"type": ["string", "null"], "format": "date"}
+            }
+          }
+        },
+        "implanted_devices": {"type": "array"},
+        "allergies": {"type": "array"},
+        "primary_care_team": {"type": "array"}
+      }
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "event_type", "summary"],
+        "properties": {
+          "date": {"type": "string", "format": "date-time"},
+          "event_type": {
+            "type": "string",
+            "enum": ["encounter", "procedure", "diagnosis", "medication", "lab_result", "imaging", "symptom", "vital_signs", "device_implant", "referral", "other"]
+          },
+          "summary": {"type": "string"},
+          "details": {"type": "object"},
+          "source_document": {"type": ["string", "null"]},
+          "clinical_significance": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"]
+          }
+        }
+      }
+    },
+    "symptom_registry": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["symptom", "status", "first_reported", "last_reported"],
+        "properties": {
+          "symptom": {"type": "string"},
+          "status": {
+            "type": "string",
+            "enum": ["active", "resolved", "intermittent", "worsening", "improving"]
+          },
+          "first_reported": {"type": "string", "format": "date"},
+          "last_reported": {"type": "string", "format": "date"}
+        }
+      }
+    },
+    "action_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "priority", "category", "source", "status"],
+        "properties": {
+          "item": {"type": "string"},
+          "priority": {
+            "type": "string",
+            "enum": ["urgent", "high", "medium", "low"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["follow_up", "testing", "medication_review", "specialist_referral", "imaging", "therapy", "lifestyle", "other"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "completed", "overdue", "cancelled"]
+          }
+        }
+      }
+    },
+    "unresolved_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "context", "identified_date"],
+        "properties": {
+          "question": {"type": "string"},
+          "context": {"type": "string"},
+          "identified_date": {"type": "string", "format": "date"}
+        }
+      }
+    }
+  }
+}
