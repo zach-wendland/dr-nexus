@@ -1,0 +1,30 @@
+# Dr. Nexus - Vercel Ignore
+
+# Python files (backend not deployed to Vercel)
+dr_nexus/
+tests/
+scripts/
+*.py
+__pycache__/
+*.pyc
+
+# Medical data (HIPAA compliance)
+MedicalRecord_*/
+HealthSummary_*/
+data/
+
+# Build artifacts
+.next/
+out/
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+
+# Documentation (not needed for deployment)
+*.md
+!README.md
