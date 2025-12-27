@@ -82,8 +82,8 @@ Write-Host "✓ Setup Complete!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor White
-Write-Host "  1. The deployment workflow will run on next push" -ForegroundColor Gray
-Write-Host "  2. Watch it: gh run watch" -ForegroundColor Gray
+Write-Host '  1. The deployment workflow will run on next push' -ForegroundColor Gray
+Write-Host '  2. Watch it: gh run watch' -ForegroundColor Gray
 Write-Host '  3. Production URL: https://dr-nexus.vercel.app' -ForegroundColor Gray
 Write-Host ""
 Write-Host 'Documentation: .github/SETUP_SECRETS.md' -ForegroundColor Cyan
