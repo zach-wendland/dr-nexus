@@ -13,7 +13,19 @@
       "Bash(vercel whoami:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(vercel:*)"
+      "Bash(vercel:*)",
+      "Bash(npm install)",
+      "Bash(git reset:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File scripts/configure-vercel-secret.ps1)",
+      "Bash(chmod:*)",
+      "Bash(bash:*)",
+      "Bash(curl:*)",
+      "Bash(echo:*)",
+      "Bash(start https://vercel.com/account/tokens)",
+      "Bash(powershell -Command:*)",
+      "Bash(env)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

@@ -67,3 +67,9 @@ dmypy.json
 # Ruff
 .ruff_cache/
 .vercel
+.env*.local
+
+# Next.js
+.next/
+node_modules/
+next-env.d.ts

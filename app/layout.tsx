@@ -1,22 +1,26 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Dr. Nexus - Medical Knowledge Base',
-  description: 'Production-ready medical data processing system with FHIR/C-CDA ingestion, AI analysis, and interactive dashboard',
-  keywords: ['medical', 'healthcare', 'FHIR', 'HL7', 'knowledge base', 'AI analysis'],
-}
+  title: 'Dr. Nexus Medical Dashboard',
+  description: 'Comprehensive medical data visualization and health tracking platform with stunning visualizations',
+  keywords: ['medical', 'health', 'dashboard', 'visualization', 'patient records', 'FHIR', 'HL7'],
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased">
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <DashboardLayout>{children}</DashboardLayout>
       </body>
     </html>
-  )
+  );
 }
